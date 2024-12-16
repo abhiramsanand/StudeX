@@ -27,4 +27,13 @@ export class ClassController {
             res.status(500).json({ message: error.message || 'Internal Server Error' });
         }
     }
+
+    async getClasses(req: Request, res: Response): Promise<void> {
+        try {
+            const classes = await classService.getClass();
+            res.status(200).json({ message: 'Classes fetched successfully.', data: classes });
+        } catch (error: any) {
+            res.status(500).json({ message: error.message || 'Internal Server Error' });
+        }
+    }
 }

@@ -28,4 +28,13 @@ export class ClassService {
         const newClass = new Classes({ class_name: className, courses: courseIds });
         return await newClass.save();
     }
+
+    async getClass(): Promise<IClasses[]> {
+        const classes = await Classes.find().populate({
+            path: 'courses', 
+            select: 'course_name -_id', 
+        });
+        return classes;
+    }    
+    
 }
