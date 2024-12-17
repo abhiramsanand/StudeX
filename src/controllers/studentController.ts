@@ -76,4 +76,41 @@ export class StudentController {
         .json({ message: error.message || "Internal Server Error" });
     }
   }
+
+  async editStudents(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const { age } = req.body;
+
+      if (!Types.ObjectId.isValid(id)) {
+        res.status(400).json({ message: "Invalid student ID." });
+        return;
+      }
+
+      const students = await studentService.editStudents(new Types.ObjectId(id), age);
+      res.status(200).json({ students });
+    } catch (error: any) {
+      res
+        .status(500)
+        .json({ message: error.message || "Internal Server Error" });
+    }
+  }
+
+  async deleteStudents(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+
+      if (!Types.ObjectId.isValid(id)) {
+        res.status(400).json({ message: "Invalid student ID." });
+        return;
+      }
+
+      const students = await studentService.deleteStudents(new Types.ObjectId(id));
+      res.status(200).json({ students });
+    } catch (error: any) {
+      res
+        .status(500)
+        .json({ message: error.message || "Internal Server Error" });
+    }
+  }
 }

@@ -27,7 +27,7 @@ export class StudentService {
   }
 
   async getStudents() {
-    const students = await Students.findOne({}, "student_name age");
+    const students = await Students.find({}, "student_name age");
     return students;
   }
 
@@ -47,5 +47,15 @@ export class StudentService {
     }
 
     return studentDetails;
+  }
+
+  async editStudents(studentId: Types.ObjectId, age: number) {
+    const students = await Students.findByIdAndUpdate(studentId, {$set: {age}}, { new: true, upsert: true });
+    return students;
+  }
+
+  async deleteStudents(studentId: Types.ObjectId) {
+    const students = await Students.findByIdAndDelete(studentId);
+    return students;
   }
 }
