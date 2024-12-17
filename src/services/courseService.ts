@@ -1,4 +1,3 @@
-// course.service.ts
 import { Courses, ICourses } from '../models/courses';
 
 export class CourseService {
