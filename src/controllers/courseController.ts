@@ -12,7 +12,7 @@ export class CourseController {
      */
     async createCourse(req: Request, res: Response): Promise<void> {
         try {
-            const { course_name } = req.body;
+            const { course_name, credit } = req.body;
 
             // Validate input
             if (!course_name || typeof course_name !== 'string') {
@@ -21,7 +21,7 @@ export class CourseController {
             }
 
             // Call the service to create the course
-            const course = await courseService.createCourse(course_name);
+            const course = await courseService.createCourse(course_name, credit);
 
             res.status(201).json({ message: 'Course created successfully.', data: course });
         } catch (error: any) {

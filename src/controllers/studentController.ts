@@ -43,6 +43,28 @@ export class StudentController {
     }
   }
 
+  async searchStudents(req: any, res: any) {
+    try {
+      const { term } = req.query;
+      if (!term || typeof term !== "string") {
+        return res
+          .status(400)
+          .json({ message: "Invalid or missing search term." });
+      }
+
+      const results = await studentService.searchStudents(term);
+      res
+        .status(200)
+        .json({
+          message: "Search results fetched successfully.",
+          data: results,
+        });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal Server Error." });
+    }
+  }
+
   async getStudents(req: Request, res: Response): Promise<void> {
     try {
       const students = await studentService.getStudents();
@@ -87,7 +109,10 @@ export class StudentController {
         return;
       }
 
-      const students = await studentService.editStudents(new Types.ObjectId(id), age);
+      const students = await studentService.editStudents(
+        new Types.ObjectId(id),
+        age
+      );
       res.status(200).json({ students });
     } catch (error: any) {
       res
@@ -105,7 +130,9 @@ export class StudentController {
         return;
       }
 
-      const students = await studentService.deleteStudents(new Types.ObjectId(id));
+      const students = await studentService.deleteStudents(
+        new Types.ObjectId(id)
+      );
       res.status(200).json({ students });
     } catch (error: any) {
       res
