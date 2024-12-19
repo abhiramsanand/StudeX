@@ -1,11 +1,16 @@
 import React from "react";
-import StudentsTable from "../src/components/studentTable";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import StudentsTable from "./components/studentTable";
+import StudentDetails from "./components/studentDetails";
 
 const App: React.FC = () => {
   return (
-    <div>
-      <StudentsTable />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<StudentsTable />} />
+        <Route path="/students/:id" element={<StudentDetails />} />
+      </Routes>
+    </Router>
   );
 };
 
