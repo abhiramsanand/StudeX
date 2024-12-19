@@ -6,7 +6,7 @@ export class CourseService {
      * @param courseName - Name of the course to create.
      * @returns Created course object or throws an error.
      */
-    async createCourse(courseName: string): Promise<ICourses> {
+    async createCourse(courseName: string, credit: number): Promise<ICourses> {
         // Check if the course already exists
         const existingCourse = await Courses.findOne({ course_name: courseName });
         if (existingCourse) {
@@ -14,7 +14,7 @@ export class CourseService {
         }
 
         // Create the new course
-        const newCourse = new Courses({ course_name: courseName });
+        const newCourse = new Courses({ course_name: courseName, credit: credit });
         return await newCourse.save();
     }
 }

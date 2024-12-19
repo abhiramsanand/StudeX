@@ -7,6 +7,7 @@ const router = express.Router();
 const studentController = new StudentController();
 
 router.post('/', studentController.createStudent);
+router.get('/search', studentController.searchStudents);
 router.get('/', studentController.getStudents);
 router.get("/:id", studentController.getStudentDetails);
 router.put("/:id", studentController.editStudents);
