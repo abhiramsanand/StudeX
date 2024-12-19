@@ -78,4 +78,74 @@ export class StudentService {
     const students = await Students.findByIdAndDelete(studentId);
     return students;
   }
+
+  async getStudentCourses(studentId: string) {
+    const student = await Students.findById(studentId).populate("class");
+    if (!student) {
+      throw new Error("Student not found.");
+    }
+
+    const studentClass = await Classes.findById(student.class).populate(
+      "courses"
+    );
+    if (!studentClass) {
+      throw new Error("Class not found.");
+    }
+
+    return studentClass.courses;
+  }
+
+  async updateStudentCourses(studentId: string, courseIds: Types.ObjectId[]) {
+    const isValid = courseIds.every((id) =>
+      mongoose.Types.ObjectId.isValid(id)
+    );
+    if (!isValid) {
+      throw new Error("One or more course IDs are invalid.");
+    }
+
+    const student = await Students.findById(studentId).populate("class");
+    if (!student) {
+      throw new Error("Student not found.");
+    }
+
+    const studentClass = await Classes.findById(student.class).populate(
+      "courses"
+    );
+    if (!studentClass) {
+      throw new Error("Class not found.");
+    }
+
+    const classCourseIds = studentClass.courses.map((course: any) =>
+      course._id.toString()
+    );
+
+    const areCoursesValid = courseIds.every((id) =>
+      classCourseIds.includes(id.toString())
+    );
+    if (!areCoursesValid) {
+      throw new Error(
+        "Selected courses are not part of the assigned class courses."
+      );
+    }
+
+    const courses = await Courses.find({ _id: { $in: courseIds } });
+
+    let totalCredits = 0;
+
+    for (let i = 0; i < courses.length; i++) {
+      totalCredits += courses[i].credit || 0;
+    }
+
+    if (totalCredits < 6 || totalCredits > 7) {
+      throw new Error(
+        "Total credits of selected courses must be between 6 and 7."
+      );
+    }
+
+    return await Students.findByIdAndUpdate(
+      studentId,
+      { coursesselected: courseIds },
+      { new: true }
+    );
+  }
 }

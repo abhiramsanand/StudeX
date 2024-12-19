@@ -68,6 +68,9 @@ const StudentsTable: React.FC = () => {
                   </Link>
                 </td>
                 <td style={thTdStyle}>{student.age}</td>
+                <td style={thTdStyle}><Link to={`/students/select/${student._id}`} style={{ color: "blue", textDecoration: "underline" }}>
+                    Select Course
+                  </Link></td>
               </tr>
             ))}
           </tbody>

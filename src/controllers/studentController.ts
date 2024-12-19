@@ -53,12 +53,10 @@ export class StudentController {
       }
 
       const results = await studentService.searchStudents(term);
-      res
-        .status(200)
-        .json({
-          message: "Search results fetched successfully.",
-          data: results,
-        });
+      res.status(200).json({
+        message: "Search results fetched successfully.",
+        data: results,
+      });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Internal Server Error." });
@@ -134,6 +132,40 @@ export class StudentController {
         new Types.ObjectId(id)
       );
       res.status(200).json({ students });
+    } catch (error: any) {
+      res
+        .status(500)
+        .json({ message: error.message || "Internal Server Error" });
+    }
+  }
+
+  async getStudentCourses(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+
+      const courses = await studentService.getStudentCourses(
+        id
+      );
+
+      res.status(200).json(courses);
+    } catch (error: any) {
+      res
+        .status(500)
+        .json({ message: error.message || "Internal Server Error" });
+    }
+  }
+
+  async updateStudentCourses(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const { coursesselected } = req.body;
+
+      const updatedStudent = await studentService.updateStudentCourses(
+        id,
+        coursesselected
+      );
+
+      res.status(200).json(updatedStudent);
     } catch (error: any) {
       res
         .status(500)

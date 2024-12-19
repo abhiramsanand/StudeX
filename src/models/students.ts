@@ -11,8 +11,9 @@ const StudentsSchema: Schema = new Schema({
     student_name: { type: String, required: true },
     age: { type: Number, required: true },
     class: { type: Schema.Types.ObjectId, ref: 'Classes', required: true },
-    coursesselected: { type: Schema.Types.ObjectId, ref: 'Courses', required: true }
+    coursesselected: [{ type: Schema.Types.ObjectId, ref: 'Courses', required: true }] 
 });
+
 
 const Students = mongoose.model<IStudents>('Students', StudentsSchema);
 export { Students, IStudents };
