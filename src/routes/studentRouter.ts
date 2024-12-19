@@ -12,5 +12,7 @@ router.get('/', studentController.getStudents);
 router.get("/:id", studentController.getStudentDetails);
 router.put("/:id", studentController.editStudents);
 router.delete("/:id", studentController.deleteStudents);
+router.post("/courses/:id", studentController.updateStudentCourses);
+router.get("/courses/:id", studentController.getStudentCourses);
 
 export default router;
