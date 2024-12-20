@@ -8,5 +8,6 @@ const classController = new ClassController();
 
 router.post('/', classController.createClass);
 router.get('/', classController.getClasses);
+router.get('/fetchall', classController.getClassesOnly);
 
 export default router;

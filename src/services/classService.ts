@@ -54,4 +54,9 @@ export class ClassService {
     });
     return classes;
   }
+
+  async getClasses(): Promise<IClasses[]> {
+    const classes = await Classes.find({}, "class_name -_id");
+    return classes;
+  }
 }
