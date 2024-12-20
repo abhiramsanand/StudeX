@@ -17,4 +17,9 @@ export class CourseService {
         const newCourse = new Courses({ course_name: courseName, credit: credit });
         return await newCourse.save();
     }
+
+    async getCourses(): Promise<ICourses[]> {
+        const classes = await Courses.find({}, "course_name credit -_id");
+        return classes;
+      }
 }

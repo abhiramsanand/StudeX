@@ -4,6 +4,8 @@ import StudentsTable from "./components/studentTable";
 import StudentDetails from "./components/studentDetails";
 import CourseSelect from "./components/selectCourses";
 import StudentForm from "./components/createStudent";
+import CreateClass from "./components/createClass";
+import CreateCourse from "./components/createCourse";
 
 const App: React.FC = () => {
   return (
@@ -13,6 +15,8 @@ const App: React.FC = () => {
         <Route path="/students/:id" element={<StudentDetails />} />
         <Route path="/students/select/:id" element={<CourseSelect />} />
         <Route path="/students/create" element={<StudentForm />} />
+        <Route path="/classes/create" element={<CreateClass/>} />
+        <Route path="/courses/create" element={<CreateCourse/>} />
       </Routes>
     </Router>
   );

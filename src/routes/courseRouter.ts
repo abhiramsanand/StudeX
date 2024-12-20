@@ -11,5 +11,6 @@ const courseController = new CourseController();
  * @access Public
  */
 router.post('/', courseController.createCourse);
+router.get('/', courseController.getCourses);
 
 export default router;
