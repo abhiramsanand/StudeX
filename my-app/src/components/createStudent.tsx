@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
+interface Class {
+  class_name: string;
+}
 
 const StudentForm: React.FC = () => {
   const [studentName, setStudentName] = useState("");
@@ -6,6 +10,7 @@ const StudentForm: React.FC = () => {
   const [className, setClassName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [classes, setClasses] = useState<Class[]>([]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,6 +54,25 @@ const StudentForm: React.FC = () => {
       setError((err as Error).message);
     }
   };
+
+  useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3000/api/classes/fetchall`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch classes.");
+        }
+        const data = await response.json();
+        setClasses(data.data); // Use the 'data' property to get the array of classes
+      } catch (err) {
+        setError((err as Error).message);
+      }
+    };
+
+    fetchClasses();
+  }, []);
 
   const containerStyle = {
     maxWidth: "400px",
@@ -121,7 +145,9 @@ const StudentForm: React.FC = () => {
         {success && <p style={successStyle}>{success}</p>}
 
         <div style={formGroupStyle}>
-          <label htmlFor="student_name" style={labelStyle}>Student Name</label>
+          <label htmlFor="student_name" style={labelStyle}>
+            Student Name
+          </label>
           <input
             type="text"
             id="student_name"
@@ -133,7 +159,9 @@ const StudentForm: React.FC = () => {
         </div>
 
         <div style={formGroupStyle}>
-          <label htmlFor="age" style={labelStyle}>Age</label>
+          <label htmlFor="age" style={labelStyle}>
+            Age
+          </label>
           <input
             type="number"
             id="age"
@@ -145,22 +173,37 @@ const StudentForm: React.FC = () => {
         </div>
 
         <div style={formGroupStyle}>
-          <label htmlFor="class_name" style={labelStyle}>Class Name</label>
-          <input
-            type="text"
+          <label htmlFor="class_name" style={labelStyle}>
+            Class Name
+          </label>
+          <select
             id="class_name"
             value={className}
             onChange={(e) => setClassName(e.target.value)}
             style={inputStyle}
-            placeholder="Enter class name"
-          />
+          >
+            <option value="" disabled>
+              Select class
+            </option>
+            {classes.map((classItem, index) => (
+              <option key={index} value={classItem.class_name}>
+                {classItem.class_name}
+              </option>
+            ))}
+          </select>
         </div>
 
         <button
           type="submit"
           style={buttonStyle}
-          onMouseOver={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = buttonHoverStyle.backgroundColor)}
-          onMouseOut={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = buttonStyle.backgroundColor)}
+          onMouseOver={(e) =>
+            ((e.target as HTMLButtonElement).style.backgroundColor =
+              buttonHoverStyle.backgroundColor)
+          }
+          onMouseOut={(e) =>
+            ((e.target as HTMLButtonElement).style.backgroundColor =
+              buttonStyle.backgroundColor)
+          }
         >
           Submit
         </button>
