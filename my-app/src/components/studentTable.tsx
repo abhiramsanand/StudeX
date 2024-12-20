@@ -32,91 +32,238 @@ const StudentsTable: React.FC = () => {
     fetchStudents();
   }, []);
 
-  const containerStyle = {
-    maxWidth: "800px",
-    margin: "0 auto",
-    padding: "20px",
+  const styles = {
+    container: {
+      maxWidth: "1200px",
+      margin: "20px auto",
+      padding: "20px",
+      backgroundColor: "#ffffff",
+      boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+      borderRadius: "16px",
+      fontFamily: "Arial, sans-serif",
+    },
+    header: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: "20px",
+      padding: "10px 0",
+    },
+    title: {
+      fontSize: "32px",
+      color: "#2c3e50",
+      margin: "0",
+      fontWeight: "bold",
+      letterSpacing: "-0.5px",
+    },
+    createButton: {
+      padding: "12px 24px",
+      backgroundColor: "#3498db",
+      color: "white",
+      border: "none",
+      borderRadius: "8px",
+      textDecoration: "none",
+      fontWeight: "600",
+      transition: "all 0.3s ease",
+      cursor: "pointer",
+      boxShadow: "0 4px 6px rgba(52, 152, 219, 0.2)",
+    },
+    th: {
+      backgroundColor: "#f8f9fa",
+      color: "#2c3e50",
+      padding: "20px 15px",
+      textAlign: "center" as const,
+      fontWeight: "600",
+      borderBottom: "2px solid #e9ecef",
+      position: "sticky" as const,
+      top: "0",
+      zIndex: "10",
+      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+    },
+    td: {
+      padding: "16px 15px",
+      borderBottom: "1px solid #e9ecef",
+      color: "#2c3e50",
+      textAlign: "center" as const,
+    },
+    td1: {
+      padding: "16px 15px",
+      borderBottom: "1px solid #e9ecef",
+      color: "#2c3e50",
+      display: "flex",
+      justifyContent: "center",
+      gap: "12px",
+    },
+    selectButton: {
+      padding: "8px 16px",
+      backgroundColor: "#2ecc71",
+      color: "white",
+      border: "none",
+      borderRadius: "6px",
+      textDecoration: "none",
+      fontSize: "14px",
+      transition: "all 0.3s ease",
+      boxShadow: "0 2px 4px rgba(46, 204, 113, 0.2)",
+    },
+    loadingContainer: {
+      textAlign: "center" as const,
+      padding: "40px",
+      color: "#666",
+      fontSize: "18px",
+    },
+    errorContainer: {
+      textAlign: "center" as const,
+      padding: "40px",
+      color: "#e74c3c",
+      fontSize: "18px",
+    },
+    row: {
+      transition: "all 0.3s ease",
+    },
   };
-  const thTdStyle = {
-    border: "1px solid #ddd",
-    padding: "12px",
-    textAlign: "left" as const,
-  };
-  const thStyle = { backgroundColor: "#f4f4f4", fontWeight: "bold" };
-  const rowHoverStyle = { backgroundColor: "#f9f9f9" };
-  const titleStyle = {
-    textAlign: "center" as const,
-    fontSize: "24px",
-    marginBottom: "20px",
-    color: "#333",
-  };
-  const errorStyle = { color: "red", textAlign: "center" as const };
-  const loadingStyle = { textAlign: "center" as const, color: "#555" };
+
+  const scrollbarStyles = `
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 5px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 5px;
+      border: 2px solid #f1f1f1;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+  `;
+
+  if (loading) {
+    return <div style={styles.loadingContainer}>Loading...</div>;
+  }
+
+  if (error) {
+    return <div style={styles.errorContainer}>{error}</div>;
+  }
 
   return (
-    <div style={containerStyle}>
-      <h1 style={titleStyle}>Students List</h1>
-      {loading ? (
-        <p style={loadingStyle}>Loading...</p>
-      ) : error ? (
-        <p style={errorStyle}>{error}</p>
-      ) : (
-        <>
-          <div style={{ display: "flex", justifyContent: "right", marginBottom: "20px"}}>
-            <Link
-              to={`/students/create`}
-              style={{ color: "blue", textDecoration: "underline" }}
-            >
-              Create Student
-            </Link>
-          </div>
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            <thead>
-              <tr>
-                <th style={{ ...thTdStyle, ...thStyle }}>Name</th>
-                <th style={{ ...thTdStyle, ...thStyle }}>Age</th>
-                <th style={{ ...thTdStyle, ...thStyle }}>Action</th>
+    <div style={styles.container}>
+      <style>{scrollbarStyles}</style>
+      <div style={styles.header}>
+        <h1 style={styles.title}>Students List</h1>
+        <Link
+          to="/students/create"
+          style={styles.createButton}
+          onMouseOver={(e) => {
+            e.currentTarget.style.backgroundColor = "#2980b9";
+            e.currentTarget.style.transform = "translateY(-2px)";
+            e.currentTarget.style.boxShadow =
+              "0 6px 12px rgba(52, 152, 219, 0.3)";
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.backgroundColor = "#3498db";
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow =
+              "0 4px 6px rgba(52, 152, 219, 0.2)";
+          }}
+        >
+          Create Student
+        </Link>
+      </div>
+
+      <div
+        style={{
+          maxHeight: "calc(100vh - 170px)",
+          overflowX: "hidden",
+          borderRadius: "12px",
+          boxShadow: "0 4px 16px rgba(0, 0, 0, 0.08)",
+          background: "white",
+        }}
+      >
+        <table
+          style={{
+            width: "100%",
+            borderCollapse: "separate",
+            borderSpacing: "0",
+            backgroundColor: "white",
+          }}
+        >
+          <thead>
+            <tr>
+              <th style={styles.th}>Name</th>
+              <th style={styles.th}>Age</th>
+              <th style={styles.th}>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {students.map((student, index) => (
+              <tr
+                key={student._id}
+                style={{
+                  ...styles.row,
+                  backgroundColor: index % 2 === 0 ? "#f8f9fa" : "white",
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = "#f1f8ff";
+                  e.currentTarget.style.transform = "scale(1.005)";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor =
+                    index % 2 === 0 ? "#f8f9fa" : "white";
+                  e.currentTarget.style.transform = "scale(1)";
+                }}
+              >
+                <td style={styles.td}>{student.student_name}</td>
+                <td style={styles.td}>{student.age}</td>
+                <td style={styles.td1}>
+                  <Link
+                    to={`/students/${student._id}`}
+                    style={styles.selectButton}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.backgroundColor = "#27ae60";
+                      e.currentTarget.style.transform = "translateY(-2px)";
+                      e.currentTarget.style.boxShadow =
+                        "0 4px 8px rgba(46, 204, 113, 0.3)";
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.backgroundColor = "#2ecc71";
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.boxShadow =
+                        "0 2px 4px rgba(46, 204, 113, 0.2)";
+                    }}
+                  >
+                    View Details
+                  </Link>
+                  <Link
+                    to={`/students/select/${student._id}`}
+                    style={styles.selectButton}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.backgroundColor = "#27ae60";
+                      e.currentTarget.style.transform = "translateY(-2px)";
+                      e.currentTarget.style.boxShadow =
+                        "0 4px 8px rgba(46, 204, 113, 0.3)";
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.backgroundColor = "#2ecc71";
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.boxShadow =
+                        "0 2px 4px rgba(46, 204, 113, 0.2)";
+                    }}
+                  >
+                    Select Course
+                  </Link>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {students.map((student, index) => (
-                <tr
-                  key={student._id}
-                  style={
-                    index % 2 === 0
-                      ? rowHoverStyle
-                      : { backgroundColor: "#ffffff" }
-                  }
-                >
-                  <td style={thTdStyle}>
-                    <Link
-                      to={`/students/${student._id}`}
-                      style={{ color: "blue", textDecoration: "underline" }}
-                    >
-                      {student.student_name}
-                    </Link>
-                  </td>
-                  <td style={thTdStyle}>{student.age}</td>
-                  <td style={thTdStyle}>
-                    <Link
-                      to={`/students/select/${student._id}`}
-                      style={{ color: "blue", textDecoration: "underline" }}
-                    >
-                      Select Course
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </>
-      )}
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
