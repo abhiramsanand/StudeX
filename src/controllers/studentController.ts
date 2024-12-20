@@ -9,7 +9,6 @@ export class StudentController {
     try {
       const { student_name, age, class_name } = req.body;
 
-      // Validate input
       if (!student_name || typeof student_name !== "string") {
         res.status(400).json({ message: "Invalid student name." });
         return;
@@ -25,7 +24,6 @@ export class StudentController {
         return;
       }
 
-      // Call the service to create the student
       const createdStudent = await studentService.createStudent(
         student_name,
         age,
@@ -78,13 +76,11 @@ export class StudentController {
     try {
       const { id } = req.params;
 
-      // Validate the ID
       if (!Types.ObjectId.isValid(id)) {
         res.status(400).json({ message: "Invalid student ID." });
         return;
       }
 
-      // Fetch student details
       const studentDetails = await studentService.getStudentDetails(
         new Types.ObjectId(id)
       );

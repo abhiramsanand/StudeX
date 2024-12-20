@@ -8,7 +8,6 @@ export class ClassController {
         try {
             const { class_name, courses } = req.body;
 
-            // Validate input
             if (!class_name || typeof class_name !== 'string') {
                 res.status(400).json({ message: 'Invalid class name.' });
                 return;
@@ -19,7 +18,6 @@ export class ClassController {
                 return;
             }
 
-            // Call the service to create the class
             const createdClass = await classService.createClass(class_name, courses);
 
             res.status(201).json({ message: 'Class created successfully.', data: createdClass });

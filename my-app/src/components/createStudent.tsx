@@ -143,7 +143,6 @@ const StudentForm: React.FC = () => {
     const selectedClass = e.target.value;
     setClassName(selectedClass);
 
-    // If "Create New Class" is selected, navigate to the creation page
     if (selectedClass === "new-class") {
       navigate("/classes/create");
     }

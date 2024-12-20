@@ -95,7 +95,6 @@ const StudentsTable: React.FC = () => {
                   }
                 >
                   <td style={thTdStyle}>
-                    {/* Make name clickable */}
                     <Link
                       to={`/students/${student._id}`}
                       style={{ color: "blue", textDecoration: "underline" }}
