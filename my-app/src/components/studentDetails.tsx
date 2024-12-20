@@ -10,9 +10,9 @@ interface Course {
 interface Student {
   _id: string;
   student_name: string;
+  coursesselected: Course[]
   class: {
     class_name: string;
-    courses: Course[];
   };
 }
 
@@ -86,7 +86,7 @@ const StudentDetails: React.FC = () => {
           <div>
             <strong>Courses:</strong>
             <ul style={listStyle}>
-              {student.class.courses.map((course, index) => (
+              {student.coursesselected.map((course, index) => (
                 <li key={index}>{course.course_name}</li>
               ))}
             </ul>

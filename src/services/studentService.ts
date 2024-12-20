@@ -46,24 +46,26 @@ export class StudentService {
   }
 
   async getStudentDetails(studentId: Types.ObjectId) {
-    const studentDetails = await Students.findById(
-      studentId,
-      "student_name"
-    ).populate({
-      path: "class",
-      select: "class_name -_id",
-      populate: {
-        path: "courses",
+    const studentDetails = await Students.findById(studentId, "student_name coursesselected")
+      .populate({
+        path: "class",
+        select: "class_name -_id",
+        populate: {
+          path: "courses",
+          select: "course_name -_id",
+        },
+      })
+      .populate({
+        path: "coursesselected",
         select: "course_name -_id",
-      },
-    });
-
+      });
+  
     if (!studentDetails) {
       throw new Error("Student not found.");
     }
-
     return studentDetails;
   }
+  
 
   async editStudents(studentId: Types.ObjectId, age: number) {
     const students = await Students.findByIdAndUpdate(
