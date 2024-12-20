@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Class {
   class_name: string;
 }
 
 const StudentForm: React.FC = () => {
+  const navigate = useNavigate(); 
   const [studentName, setStudentName] = useState("");
   const [age, setAge] = useState("");
   const [className, setClassName] = useState("");
@@ -65,7 +67,7 @@ const StudentForm: React.FC = () => {
           throw new Error("Failed to fetch classes.");
         }
         const data = await response.json();
-        setClasses(data.data); // Use the 'data' property to get the array of classes
+        setClasses(data.data);
       } catch (err) {
         setError((err as Error).message);
       }
@@ -137,6 +139,16 @@ const StudentForm: React.FC = () => {
     textAlign: "center" as const,
   };
 
+  const handleClassChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedClass = e.target.value;
+    setClassName(selectedClass);
+
+    // If "Create New Class" is selected, navigate to the creation page
+    if (selectedClass === "new-class") {
+      navigate("/classes/create");
+    }
+  };
+
   return (
     <div style={containerStyle}>
       <h2 style={titleStyle}>Student Registration</h2>
@@ -179,7 +191,7 @@ const StudentForm: React.FC = () => {
           <select
             id="class_name"
             value={className}
-            onChange={(e) => setClassName(e.target.value)}
+            onChange={handleClassChange}
             style={inputStyle}
           >
             <option value="" disabled>
@@ -190,9 +202,14 @@ const StudentForm: React.FC = () => {
                 {classItem.class_name}
               </option>
             ))}
+            <option
+              value="new-class"
+              style={{ color: "blue", fontStyle: "italic" }}
+            >
+              &#43; Create New Class
+            </option>
           </select>
         </div>
-
         <button
           type="submit"
           style={buttonStyle}
