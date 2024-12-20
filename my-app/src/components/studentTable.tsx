@@ -32,11 +32,24 @@ const StudentsTable: React.FC = () => {
     fetchStudents();
   }, []);
 
-  const containerStyle = { maxWidth: "800px", margin: "0 auto", padding: "20px" };
-  const thTdStyle = { border: "1px solid #ddd", padding: "12px", textAlign: "left" as const };
+  const containerStyle = {
+    maxWidth: "800px",
+    margin: "0 auto",
+    padding: "20px",
+  };
+  const thTdStyle = {
+    border: "1px solid #ddd",
+    padding: "12px",
+    textAlign: "left" as const,
+  };
   const thStyle = { backgroundColor: "#f4f4f4", fontWeight: "bold" };
   const rowHoverStyle = { backgroundColor: "#f9f9f9" };
-  const titleStyle = { textAlign: "center" as const, fontSize: "24px", marginBottom: "20px", color: "#333" };
+  const titleStyle = {
+    textAlign: "center" as const,
+    fontSize: "24px",
+    marginBottom: "20px",
+    color: "#333",
+  };
   const errorStyle = { color: "red", textAlign: "center" as const };
   const loadingStyle = { textAlign: "center" as const, color: "#555" };
 
@@ -48,33 +61,62 @@ const StudentsTable: React.FC = () => {
       ) : error ? (
         <p style={errorStyle}>{error}</p>
       ) : (
-        <table style={{width: "100%", borderCollapse: "collapse", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
-          <thead>
-            <tr>
-              <th style={{ ...thTdStyle, ...thStyle }}>Name</th>
-              <th style={{ ...thTdStyle, ...thStyle }}>Age</th>
-            </tr>
-          </thead>
-          <tbody>
-            {students.map((student, index) => (
-              <tr
-                key={student._id}
-                style={index % 2 === 0 ? rowHoverStyle : { backgroundColor: "#ffffff" }}
-              >
-                <td style={thTdStyle}>
-                  {/* Make name clickable */}
-                  <Link to={`/students/${student._id}`} style={{ color: "blue", textDecoration: "underline" }}>
-                    {student.student_name}
-                  </Link>
-                </td>
-                <td style={thTdStyle}>{student.age}</td>
-                <td style={thTdStyle}><Link to={`/students/select/${student._id}`} style={{ color: "blue", textDecoration: "underline" }}>
-                    Select Course
-                  </Link></td>
+        <>
+          <div style={{ display: "flex", justifyContent: "right", marginBottom: "20px"}}>
+            <Link
+              to={`/students/create`}
+              style={{ color: "blue", textDecoration: "underline" }}
+            >
+              Create Student
+            </Link>
+          </div>
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <thead>
+              <tr>
+                <th style={{ ...thTdStyle, ...thStyle }}>Name</th>
+                <th style={{ ...thTdStyle, ...thStyle }}>Age</th>
+                <th style={{ ...thTdStyle, ...thStyle }}>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {students.map((student, index) => (
+                <tr
+                  key={student._id}
+                  style={
+                    index % 2 === 0
+                      ? rowHoverStyle
+                      : { backgroundColor: "#ffffff" }
+                  }
+                >
+                  <td style={thTdStyle}>
+                    {/* Make name clickable */}
+                    <Link
+                      to={`/students/${student._id}`}
+                      style={{ color: "blue", textDecoration: "underline" }}
+                    >
+                      {student.student_name}
+                    </Link>
+                  </td>
+                  <td style={thTdStyle}>{student.age}</td>
+                  <td style={thTdStyle}>
+                    <Link
+                      to={`/students/select/${student._id}`}
+                      style={{ color: "blue", textDecoration: "underline" }}
+                    >
+                      Select Course
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
       )}
     </div>
   );

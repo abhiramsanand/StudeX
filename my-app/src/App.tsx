@@ -2,6 +2,8 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import StudentsTable from "./components/studentTable";
 import StudentDetails from "./components/studentDetails";
+import CourseSelect from "./components/selectCourses";
+import StudentForm from "./components/createStudent";
 
 const App: React.FC = () => {
   return (
@@ -9,6 +11,8 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<StudentsTable />} />
         <Route path="/students/:id" element={<StudentDetails />} />
+        <Route path="/students/select/:id" element={<CourseSelect />} />
+        <Route path="/students/create" element={<StudentForm />} />
       </Routes>
     </Router>
   );
