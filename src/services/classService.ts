@@ -3,12 +3,6 @@ import { Classes, IClasses } from "../models/classes";
 import { Courses } from "../models/courses";
 
 export class ClassService {
-  /**
-   * Create a class with course references.
-   * @param className - Name of the class.
-   * @param courseNames - Array of course names.
-   * @returns The created class object.
-   */
   async createClass(
     className: string,
     courseNames: string[]

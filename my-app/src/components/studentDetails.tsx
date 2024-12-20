@@ -22,7 +22,6 @@ const StudentDetails: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch student details from the API
   const fetchStudentDetails = async () => {
     try {
       const response = await fetch(`http://localhost:3000/api/students/${id}`);
@@ -30,7 +29,7 @@ const StudentDetails: React.FC = () => {
         throw new Error("Failed to fetch student details.");
       }
       const result = await response.json();
-      setStudent(result.data); // Ensure the API response's "data" key is used
+      setStudent(result.data); 
       setLoading(false);
     } catch (err: any) {
       setError(err.message || "Something went wrong.");
@@ -42,7 +41,6 @@ const StudentDetails: React.FC = () => {
     fetchStudentDetails();
   }, [id]);
 
-  // Inline styles
   const containerStyle = {
     maxWidth: "600px",
     margin: "0 auto",
