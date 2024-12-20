@@ -13,6 +13,7 @@ const CreateClass: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [courses, setCourses] = useState<Course[]>([]);
+  const [credit, setCredit] = useState<Course[]>([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,6 +29,7 @@ const CreateClass: React.FC = () => {
     const classData = {
       class_name: className,
       courses: selectedCourses,
+      credit: credit
     };
 
     try {
@@ -60,6 +62,7 @@ const CreateClass: React.FC = () => {
         }
         const data = await response.json();
         setCourses(data.data);
+        setCredit(data.data)
       } catch (err) {
         setError((err as Error).message);
       }
@@ -175,6 +178,8 @@ const CreateClass: React.FC = () => {
                     style={{ marginRight: "8px" }}
                   />
                   {course.course_name}
+                  &nbsp;&nbsp;&nbsp;
+                  ({course.credit})
                 </label>
               ))}
               <div
