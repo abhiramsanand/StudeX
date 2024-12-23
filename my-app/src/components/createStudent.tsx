@@ -6,7 +6,7 @@ interface Class {
 }
 
 const StudentForm: React.FC = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [studentName, setStudentName] = useState("");
   const [age, setAge] = useState("");
   const [className, setClassName] = useState("");
@@ -36,10 +36,12 @@ const StudentForm: React.FC = () => {
     };
 
     try {
+      const token = localStorage.getItem("token");
       const response = await fetch("http://localhost:3000/api/students", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(studentData),
       });
@@ -60,8 +62,16 @@ const StudentForm: React.FC = () => {
   useEffect(() => {
     const fetchClasses = async () => {
       try {
+        const token = localStorage.getItem('token')
         const response = await fetch(
-          `http://localhost:3000/api/classes/fetchall`
+          `http://localhost:3000/api/classes/fetchall`,
+          {
+            method: "GET",
+            headers: {
+              "content-type": "application/json",
+              Authorization: `Bearer ${token}`
+            },
+          }
         );
         if (!response.ok) {
           throw new Error("Failed to fetch classes.");

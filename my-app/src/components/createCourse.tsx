@@ -27,10 +27,12 @@ const CreateCourse: React.FC = () => {
     };
 
     try {
+      const token = localStorage.getItem('token')
       const response = await fetch("http://localhost:3000/api/courses", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization : `Bearer ${token}`
         },
         body: JSON.stringify(courseData),
       });

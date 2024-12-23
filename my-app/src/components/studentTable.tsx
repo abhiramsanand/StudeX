@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import handleLogout from "./logoutButton";
 
 interface Student {
   _id: string;
@@ -15,7 +16,18 @@ const StudentsTable: React.FC = () => {
 
   const fetchStudents = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/students");
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        throw new Error("Please log in to continue.");
+      }
+      const response = await fetch("http://localhost:3000/api/students", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (!response.ok) {
         throw new Error("Failed to fetch students.");
       }
@@ -157,6 +169,25 @@ const StudentsTable: React.FC = () => {
       <style>{scrollbarStyles}</style>
       <div style={styles.header}>
         <h1 style={styles.title}>Students List</h1>
+        <Link
+          to="/"
+          style={styles.createButton}
+          onMouseOver={(e) => {
+            e.currentTarget.style.backgroundColor = "#2980b9";
+            e.currentTarget.style.transform = "translateY(-2px)";
+            e.currentTarget.style.boxShadow =
+              "0 6px 12px rgba(52, 152, 219, 0.3)";
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.backgroundColor = "#3498db";
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow =
+              "0 4px 6px rgba(52, 152, 219, 0.2)";
+          }}
+          onClick={handleLogout}
+        >
+          Logout
+        </Link>
         <Link
           to="/students/create"
           style={styles.createButton}

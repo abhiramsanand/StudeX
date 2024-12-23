@@ -5,6 +5,8 @@ import cors from "cors";
 import courseRouter from './routes/courseRouter';
 import classRouter from './routes/classRouter';
 import studentRouter from './routes/studentRouter';
+import authRouter from './routes/authRouter';
+import { authenticateToken } from './middlewares/authMiddleware';
 
 dotenv.config();
 connectDB();
@@ -19,8 +21,10 @@ app.use(cors({
 
 app.use(express.json());
 
-app.use('/api/courses', courseRouter);
-app.use('/api/classes', classRouter);
-app.use('/api/students', studentRouter);
+app.use('/api/auth', authRouter);
+
+app.use('/api/courses', authenticateToken, courseRouter);
+app.use('/api/classes', authenticateToken, classRouter);
+app.use('/api/students', authenticateToken, studentRouter);
 
 export default app;

@@ -19,8 +19,15 @@ const CourseSelect: React.FC = () => {
 
   const fetchCourses = async () => {
     try {
+      const token = localStorage.getItem('token')
       const response = await fetch(
-        `http://localhost:3000/api/students/courses/${id}`
+        `http://localhost:3000/api/students/courses/${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },}
       );
       if (!response.ok) {
         throw new Error("Failed to fetch courses.");
@@ -45,12 +52,14 @@ const CourseSelect: React.FC = () => {
   const handleUpdate = async () => {
     setUpdateStatus(null);
     try {
+      const token = localStorage.getItem('token')
       const response = await fetch(
         `http://localhost:3000/api/students/courses/${id}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
           },
           body: JSON.stringify({ coursesselected: selectedCourses }),
         }
