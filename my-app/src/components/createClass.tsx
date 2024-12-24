@@ -33,10 +33,12 @@ const CreateClass: React.FC = () => {
     };
 
     try {
+      const token = localStorage.getItem('token')
       const response = await fetch("http://localhost:3000/api/classes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization : `Bearer ${token}`
         },
         body: JSON.stringify(classData),
       });
@@ -56,7 +58,16 @@ const CreateClass: React.FC = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/courses`);
+        const token = localStorage.getItem('token')
+        const response = await fetch(`http://localhost:3000/api/courses`, 
+          {
+            method : "GET",
+            headers: {
+              "content-type": "application/json",
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch courses.");
         }
