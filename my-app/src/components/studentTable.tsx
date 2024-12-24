@@ -11,23 +11,28 @@ interface Student {
 
 const StudentsTable: React.FC = () => {
   const [students, setStudents] = useState<Student[]>([]);
+  const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchStudents = async () => {
+  const fetchStudents = async (searchQuery: string = "") => {
     try {
       const token = localStorage.getItem("token");
-
       if (!token) {
         throw new Error("Please log in to continue.");
       }
-      const response = await fetch("http://localhost:3000/api/students", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `http://localhost:3000/api/students?search=${encodeURIComponent(
+          searchQuery
+        )}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch students.");
       }
@@ -41,8 +46,12 @@ const StudentsTable: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchStudents();
-  }, []);
+    fetchStudents(search);
+  }, [search]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
 
   const styles = {
     container: {
@@ -171,7 +180,20 @@ const StudentsTable: React.FC = () => {
         <div>
           <h1 style={styles.title}>Students List</h1>
         </div>
-        <div style={{display: "flex", gap: "10px"}}>
+        <input
+          type="text"
+          placeholder="Search by name"
+          value={search}
+          onChange={handleSearchChange}
+          style={{
+            padding: "10px",
+            fontSize: "16px",
+            borderRadius: "8px",
+            border: "1px solid #ddd",
+            width: "300px",
+          }}
+        />
+        <div style={{ display: "flex", gap: "10px" }}>
           <Link
             to="/courses/create"
             style={styles.createButton}
