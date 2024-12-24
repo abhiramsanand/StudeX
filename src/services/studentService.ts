@@ -40,10 +40,14 @@ export class StudentService {
     }
   }
 
-  async getStudents() {
-    const students = await Students.find({}, "student_name age");
+  async getStudents(query: string = "") {
+    const searchRegex = new RegExp(query, "i"); // Case-insensitive search
+    const students = await Students.find(
+      { student_name: { $regex: searchRegex } },
+      "student_name age"
+    );
     return students;
-  }
+  }  
 
   async getStudentDetails(studentId: Types.ObjectId) {
     const studentDetails = await Students.findById(studentId, "student_name coursesselected")

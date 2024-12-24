@@ -63,14 +63,15 @@ export class StudentController {
 
   async getStudents(req: Request, res: Response): Promise<void> {
     try {
-      const students = await studentService.getStudents();
+      const query = req.query.search as string || "";
+      const students = await studentService.getStudents(query);
       res.status(200).json({ students });
     } catch (error: any) {
       res
         .status(500)
         .json({ message: error.message || "Internal Server Error" });
     }
-  }
+  }  
 
   async getStudentDetails(req: Request, res: Response): Promise<void> {
     try {
