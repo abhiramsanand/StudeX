@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
+import EventEmitter from 'events';
 
 interface ICourses extends Document {
     course_name: string; 
@@ -12,3 +13,5 @@ const CoursesSchema: Schema = new Schema({
 
 const Courses = mongoose.model<ICourses>('Courses', CoursesSchema);
 export { Courses, ICourses };
+
+export const courseEvents = new EventEmitter();

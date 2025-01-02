@@ -1,4 +1,4 @@
-import { Courses, ICourses } from '../models/courses';
+import { Courses, ICourses, courseEvents } from '../models/courses';
 
 export class CourseService {
     async createCourse(courseName: string, credit: number): Promise<ICourses> {
@@ -8,7 +8,10 @@ export class CourseService {
         }
 
         const newCourse = new Courses({ course_name: courseName, credit: credit });
-        return await newCourse.save();
+        const savedCourse = newCourse.save();
+
+        courseEvents.emit('courseCreated', savedCourse);
+        return savedCourse;
     }
 
     async getCourses(): Promise<ICourses[]> {
