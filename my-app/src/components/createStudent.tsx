@@ -8,6 +8,7 @@ interface Class {
 const StudentForm: React.FC = () => {
   const navigate = useNavigate();
   const [studentName, setStudentName] = useState("");
+  const [email, setEmail] = useState("");
   const [age, setAge] = useState("");
   const [className, setClassName] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -31,6 +32,7 @@ const StudentForm: React.FC = () => {
 
     const studentData = {
       student_name: studentName,
+      email: email,
       age: Number(age),
       class_name: className,
     };
@@ -52,6 +54,7 @@ const StudentForm: React.FC = () => {
 
       setSuccess("Student data submitted successfully.");
       setStudentName("");
+      setEmail("");
       setAge("");
       setClassName("");
     } catch (err) {
@@ -178,7 +181,19 @@ const StudentForm: React.FC = () => {
             placeholder="Enter student name"
           />
         </div>
-
+        <div style={formGroupStyle}>
+          <label htmlFor="email" style={labelStyle}>
+            Email
+          </label>
+          <input
+            type="text"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={inputStyle}
+            placeholder="Enter student email"
+          />
+        </div>
         <div style={formGroupStyle}>
           <label htmlFor="age" style={labelStyle}>
             Age

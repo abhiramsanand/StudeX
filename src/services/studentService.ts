@@ -2,21 +2,37 @@ import { Students } from "../models/students";
 import { Classes } from "../models/classes";
 import mongoose, { Types } from "mongoose";
 import { Courses } from "../models/courses";
+import { emailConfig } from "../config/emailConfig"
 
 export class StudentService {
-  async createStudent(studentName: string, age: number, className: string) {
-    const existingClass = await Classes.findOne({ class_name: className });
+
+  async createStudent(
+    studentName: string,
+    age: number,
+    className: string,
+    email: string
+  ) {
+    const existingClass = await Classes.findOne({
+      class_name: className,
+    }).populate("courses");
     if (!existingClass) {
       throw new Error("Class not found.");
     }
+
+    const courseNames = existingClass.courses.map(
+      (course: any) => course.course_name
+    );
 
     const newStudent = new Students({
       student_name: studentName,
       age: age,
       class: existingClass._id,
+      email: email,
     });
 
-    return await newStudent.save();
+    const createdStudent = await newStudent.save();
+    await emailConfig(studentName, email, className, courseNames);
+    return createdStudent;
   }
 
   async searchStudents(searchTerm: any) {
@@ -41,16 +57,19 @@ export class StudentService {
   }
 
   async getStudents(query: string = "") {
-    const searchRegex = new RegExp(query, "i"); // Case-insensitive search
+    const searchRegex = new RegExp(query, "i");
     const students = await Students.find(
       { student_name: { $regex: searchRegex } },
       "student_name age"
     );
     return students;
-  }  
+  }
 
   async getStudentDetails(studentId: Types.ObjectId) {
-    const studentDetails = await Students.findById(studentId, "student_name coursesselected")
+    const studentDetails = await Students.findById(
+      studentId,
+      "student_name coursesselected"
+    )
       .populate({
         path: "class",
         select: "class_name -_id",
@@ -63,13 +82,12 @@ export class StudentService {
         path: "coursesselected",
         select: "course_name -_id",
       });
-  
+
     if (!studentDetails) {
       throw new Error("Student not found.");
     }
     return studentDetails;
   }
-  
 
   async editStudents(studentId: Types.ObjectId, age: number) {
     const students = await Students.findByIdAndUpdate(
