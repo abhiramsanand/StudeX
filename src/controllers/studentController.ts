@@ -5,48 +5,6 @@ import { Types } from "mongoose";
 const studentService = new StudentService();
 
 export class StudentController {
-  async createStudent(req: Request, res: Response): Promise<void> {
-    try {
-      const { student_name, age, class_name, email } = req.body;
-
-      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-      if (!email || !emailRegex.test(email)) {
-        res.status(400).json({ message: "Invalid email." });
-        return;
-      }
-
-      if (!student_name || typeof student_name !== "string") {
-        res.status(400).json({ message: "Invalid student name." });
-        return;
-      }
-
-      if (!age || typeof age !== "number" || age <= 0) {
-        res.status(400).json({ message: "Invalid age." });
-        return;
-      }
-
-      if (!class_name || typeof class_name !== "string") {
-        res.status(400).json({ message: "Invalid class name." });
-        return;
-      }
-
-      const createdStudent = await studentService.createStudent(
-        student_name,
-        age,
-        class_name,
-        email
-      );
-
-      res.status(201).json({
-        message: "Student created successfully and email notification sent.",
-        data: createdStudent,
-      });
-    } catch (error: any) {
-      res
-        .status(500)
-        .json({ message: error.message || "Internal Server Error" });
-    }
-  }
 
   async searchStudents(req: any, res: any) {
     try {

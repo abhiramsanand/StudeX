@@ -11,6 +11,7 @@ const StudentForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [age, setAge] = useState("");
   const [className, setClassName] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [classes, setClasses] = useState<Class[]>([]);
@@ -31,25 +32,25 @@ const StudentForm: React.FC = () => {
     setError(null);
 
     const studentData = {
-      student_name: studentName,
+      studentName: studentName,
       email: email,
       age: Number(age),
-      class_name: className,
+      className: className,
+      password: password,
     };
 
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:3000/api/students", {
+      const response = await fetch("http://localhost:3000/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(studentData),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to submit student data.");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to submit student data.");
       }
 
       setSuccess("Student data submitted successfully.");
@@ -57,6 +58,7 @@ const StudentForm: React.FC = () => {
       setEmail("");
       setAge("");
       setClassName("");
+      setPassword("");
     } catch (err) {
       setError((err as Error).message);
     }
@@ -65,14 +67,14 @@ const StudentForm: React.FC = () => {
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem("token");
         const response = await fetch(
           `http://localhost:3000/api/classes/fetchall`,
           {
             method: "GET",
             headers: {
               "content-type": "application/json",
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -169,7 +171,7 @@ const StudentForm: React.FC = () => {
         {success && <p style={successStyle}>{success}</p>}
 
         <div style={formGroupStyle}>
-          <label htmlFor="student_name" style={labelStyle}>
+          <label htmlFor="studentName" style={labelStyle}>
             Student Name
           </label>
           <input
@@ -207,9 +209,8 @@ const StudentForm: React.FC = () => {
             placeholder="Enter age"
           />
         </div>
-
         <div style={formGroupStyle}>
-          <label htmlFor="class_name" style={labelStyle}>
+          <label htmlFor="className" style={labelStyle}>
             Class Name
           </label>
           <select
@@ -233,6 +234,19 @@ const StudentForm: React.FC = () => {
               &#43; Create New Class
             </option>
           </select>
+        </div>
+        <div style={formGroupStyle}>
+          <label htmlFor="password" style={labelStyle}>
+            Password
+          </label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={inputStyle}
+            placeholder="Enter password"
+          />
         </div>
         <button
           type="submit"
