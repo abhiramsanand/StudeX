@@ -7,7 +7,13 @@ const studentService = new StudentService();
 export class StudentController {
   async createStudent(req: Request, res: Response): Promise<void> {
     try {
-      const { student_name, age, class_name } = req.body;
+      const { student_name, age, class_name, email } = req.body;
+
+      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+      if (!email || !emailRegex.test(email)) {
+        res.status(400).json({ message: "Invalid email." });
+        return;
+      }
 
       if (!student_name || typeof student_name !== "string") {
         res.status(400).json({ message: "Invalid student name." });
@@ -27,11 +33,12 @@ export class StudentController {
       const createdStudent = await studentService.createStudent(
         student_name,
         age,
-        class_name
+        class_name,
+        email
       );
 
       res.status(201).json({
-        message: "Student created successfully.",
+        message: "Student created successfully and email notification sent.",
         data: createdStudent,
       });
     } catch (error: any) {
@@ -63,7 +70,7 @@ export class StudentController {
 
   async getStudents(req: Request, res: Response): Promise<void> {
     try {
-      const query = req.query.search as string || "";
+      const query = (req.query.search as string) || "";
       const students = await studentService.getStudents(query);
       res.status(200).json({ students });
     } catch (error: any) {
@@ -71,7 +78,7 @@ export class StudentController {
         .status(500)
         .json({ message: error.message || "Internal Server Error" });
     }
-  }  
+  }
 
   async getStudentDetails(req: Request, res: Response): Promise<void> {
     try {
@@ -140,9 +147,7 @@ export class StudentController {
     try {
       const { id } = req.params;
 
-      const courses = await studentService.getStudentCourses(
-        id
-      );
+      const courses = await studentService.getStudentCourses(id);
 
       res.status(200).json(courses);
     } catch (error: any) {
