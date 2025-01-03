@@ -56,6 +56,8 @@ const Login: React.FC = () => {
         }
       );
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("userId", response.data.user._id);
+      localStorage.setItem("name", response.data.user.student_name)
       navigate("/students");
     } catch (err: any) {
       setError(err.response?.data?.message || "Login failed");

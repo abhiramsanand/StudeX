@@ -5,6 +5,7 @@ import cors from "cors";
 import courseRouter from './routes/courseRouter';
 import classRouter from './routes/classRouter';
 import studentRouter from './routes/studentRouter';
+import messagesRouter from './routes/messagesRouter';
 import authRouter from './routes/authRouter';
 import { authenticateToken } from './middlewares/authMiddleware';
 
@@ -26,5 +27,6 @@ app.use('/api/auth', authRouter);
 app.use('/api/courses', authenticateToken, courseRouter);
 app.use('/api/classes', authenticateToken, classRouter);
 app.use('/api/students', authenticateToken, studentRouter);
+app.use('/api/messages', authenticateToken, messagesRouter)
 
 export default app;

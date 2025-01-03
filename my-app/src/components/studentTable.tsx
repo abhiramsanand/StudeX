@@ -53,6 +53,8 @@ const StudentsTable: React.FC = () => {
     setSearch(e.target.value);
   };
 
+  const uname = localStorage.getItem("name");
+
   const styles = {
     container: {
       maxWidth: "1200px",
@@ -174,189 +176,218 @@ const StudentsTable: React.FC = () => {
   }
 
   return (
-    <div style={styles.container}>
-      <style>{scrollbarStyles}</style>
-      <div style={styles.header}>
-        <div>
-          <h1 style={styles.title}>Students List</h1>
-        </div>
-        <input
-          type="text"
-          placeholder="Search by name"
-          value={search}
-          onChange={handleSearchChange}
-          style={{
-            padding: "10px",
-            fontSize: "16px",
-            borderRadius: "8px",
-            border: "1px solid #ddd",
-            width: "300px",
-          }}
-        />
-        <div style={{ display: "flex", gap: "10px" }}>
-          <Link
-            to="/courses/create"
-            style={styles.createButton}
-            onMouseOver={(e) => {
-              e.currentTarget.style.backgroundColor = "#2980b9";
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow =
-                "0 6px 12px rgba(52, 152, 219, 0.3)";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.backgroundColor = "#3498db";
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow =
-                "0 4px 6px rgba(52, 152, 219, 0.2)";
-            }}
-          >
-            Create Course
-          </Link>
-          <Link
-            to="/classes/create"
-            style={styles.createButton}
-            onMouseOver={(e) => {
-              e.currentTarget.style.backgroundColor = "#2980b9";
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow =
-                "0 6px 12px rgba(52, 152, 219, 0.3)";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.backgroundColor = "#3498db";
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow =
-                "0 4px 6px rgba(52, 152, 219, 0.2)";
-            }}
-          >
-            Create Class
-          </Link>
-          <Link
-            to="/students/create"
-            style={styles.createButton}
-            onMouseOver={(e) => {
-              e.currentTarget.style.backgroundColor = "#2980b9";
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow =
-                "0 6px 12px rgba(52, 152, 219, 0.3)";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.backgroundColor = "#3498db";
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow =
-                "0 4px 6px rgba(52, 152, 219, 0.2)";
-            }}
-          >
-            Create Student
-          </Link>
-          <Link
-            to="/"
-            style={styles.createButton}
-            onMouseOver={(e) => {
-              e.currentTarget.style.backgroundColor = "#2980b9";
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow =
-                "0 6px 12px rgba(52, 152, 219, 0.3)";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.backgroundColor = "#3498db";
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow =
-                "0 4px 6px rgba(52, 152, 219, 0.2)";
-            }}
-            onClick={handleLogout}
-          >
-            Logout
-          </Link>
-        </div>
-      </div>
-      <div
+    <>
+      <h1
         style={{
-          maxHeight: "calc(100vh - 170px)",
-          overflowX: "hidden",
-          borderRadius: "12px",
-          boxShadow: "0 4px 16px rgba(0, 0, 0, 0.08)",
-          background: "white",
+          position: "absolute",
+          color: "green",
+          margin: "0px 30px",
         }}
       >
-        <table
+        <span style={{ color: "black" }}>Hello, </span>
+        <br />
+        {uname}!
+      </h1>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginRight: "10px",
+          marginTop: "10px",
+        }}
+      >
+        <Link
+          to="/chats"
           style={{
-            width: "100%",
-            borderCollapse: "separate",
-            borderSpacing: "0",
-            backgroundColor: "white",
+            alignSelf: "flex-end",
+            marginRight: "30px",
+            border: "1px solid green",
+            borderRadius: "5px",
+            padding: "8px 8px",
+            color: "green",
           }}
         >
-          <thead>
-            <tr>
-              <th style={styles.th}>Name</th>
-              <th style={styles.th}>Age</th>
-              <th style={styles.th}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {students.map((student, index) => (
-              <tr
-                key={student._id}
-                style={{
-                  ...styles.row,
-                  backgroundColor: index % 2 === 0 ? "#f8f9fa" : "white",
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.backgroundColor = "#f1f8ff";
-                  e.currentTarget.style.transform = "scale(1.005)";
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.backgroundColor =
-                    index % 2 === 0 ? "#f8f9fa" : "white";
-                  e.currentTarget.style.transform = "scale(1)";
-                }}
-              >
-                <td style={styles.td}>{student.student_name}</td>
-                <td style={styles.td}>{student.age}</td>
-                <td style={styles.td1}>
-                  <Link
-                    to={`/students/${student._id}`}
-                    style={styles.selectButton}
-                    onMouseOver={(e) => {
-                      e.currentTarget.style.backgroundColor = "#27ae60";
-                      e.currentTarget.style.transform = "translateY(-2px)";
-                      e.currentTarget.style.boxShadow =
-                        "0 4px 8px rgba(46, 204, 113, 0.3)";
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.backgroundColor = "#2ecc71";
-                      e.currentTarget.style.transform = "translateY(0)";
-                      e.currentTarget.style.boxShadow =
-                        "0 2px 4px rgba(46, 204, 113, 0.2)";
-                    }}
-                  >
-                    View Details
-                  </Link>
-                  <Link
-                    to={`/students/select/${student._id}`}
-                    style={styles.selectButton}
-                    onMouseOver={(e) => {
-                      e.currentTarget.style.backgroundColor = "#27ae60";
-                      e.currentTarget.style.transform = "translateY(-2px)";
-                      e.currentTarget.style.boxShadow =
-                        "0 4px 8px rgba(46, 204, 113, 0.3)";
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.backgroundColor = "#2ecc71";
-                      e.currentTarget.style.transform = "translateY(0)";
-                      e.currentTarget.style.boxShadow =
-                        "0 2px 4px rgba(46, 204, 113, 0.2)";
-                    }}
-                  >
-                    Select Course
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+          Chat with users
+        </Link>
+        <Link
+          to="/"
+          style={{
+            alignSelf: "flex-end",
+            border: "1px solid red",
+            borderRadius: "5px",
+            padding: "8px 8px",
+            color: "red",
+          }}
+          onClick={handleLogout}
+        >
+          Logout
+        </Link>
       </div>
-    </div>
+      <div style={styles.container}>
+        <style>{scrollbarStyles}</style>
+        <div style={styles.header}>
+          <div>
+            <h1 style={styles.title}>Students List</h1>
+          </div>
+          <input
+            type="text"
+            placeholder="Search by name"
+            value={search}
+            onChange={handleSearchChange}
+            style={{
+              padding: "10px",
+              fontSize: "16px",
+              borderRadius: "8px",
+              border: "1px solid #ddd",
+              width: "300px",
+            }}
+          />
+          <div style={{ display: "flex", gap: "10px" }}>
+            <Link
+              to="/courses/create"
+              style={styles.createButton}
+              onMouseOver={(e) => {
+                e.currentTarget.style.backgroundColor = "#2980b9";
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow =
+                  "0 6px 12px rgba(52, 152, 219, 0.3)";
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.backgroundColor = "#3498db";
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow =
+                  "0 4px 6px rgba(52, 152, 219, 0.2)";
+              }}
+            >
+              Create Course
+            </Link>
+            <Link
+              to="/classes/create"
+              style={styles.createButton}
+              onMouseOver={(e) => {
+                e.currentTarget.style.backgroundColor = "#2980b9";
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow =
+                  "0 6px 12px rgba(52, 152, 219, 0.3)";
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.backgroundColor = "#3498db";
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow =
+                  "0 4px 6px rgba(52, 152, 219, 0.2)";
+              }}
+            >
+              Create Class
+            </Link>
+            <Link
+              to="/students/create"
+              style={styles.createButton}
+              onMouseOver={(e) => {
+                e.currentTarget.style.backgroundColor = "#2980b9";
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow =
+                  "0 6px 12px rgba(52, 152, 219, 0.3)";
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.backgroundColor = "#3498db";
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow =
+                  "0 4px 6px rgba(52, 152, 219, 0.2)";
+              }}
+            >
+              Create Student
+            </Link>
+          </div>
+        </div>
+        <div
+          style={{
+            maxHeight: "calc(100vh - 170px)",
+            overflowX: "hidden",
+            borderRadius: "12px",
+            boxShadow: "0 4px 16px rgba(0, 0, 0, 0.08)",
+            background: "white",
+          }}
+        >
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "separate",
+              borderSpacing: "0",
+              backgroundColor: "white",
+            }}
+          >
+            <thead>
+              <tr>
+                <th style={styles.th}>Name</th>
+                <th style={styles.th}>Age</th>
+                <th style={styles.th}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {students.map((student, index) => (
+                <tr
+                  key={student._id}
+                  style={{
+                    ...styles.row,
+                    backgroundColor: index % 2 === 0 ? "#f8f9fa" : "white",
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.backgroundColor = "#f1f8ff";
+                    e.currentTarget.style.transform = "scale(1.005)";
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.backgroundColor =
+                      index % 2 === 0 ? "#f8f9fa" : "white";
+                    e.currentTarget.style.transform = "scale(1)";
+                  }}
+                >
+                  <td style={styles.td}>{student.student_name}</td>
+                  <td style={styles.td}>{student.age}</td>
+                  <td style={styles.td1}>
+                    <Link
+                      to={`/students/${student._id}`}
+                      style={styles.selectButton}
+                      onMouseOver={(e) => {
+                        e.currentTarget.style.backgroundColor = "#27ae60";
+                        e.currentTarget.style.transform = "translateY(-2px)";
+                        e.currentTarget.style.boxShadow =
+                          "0 4px 8px rgba(46, 204, 113, 0.3)";
+                      }}
+                      onMouseOut={(e) => {
+                        e.currentTarget.style.backgroundColor = "#2ecc71";
+                        e.currentTarget.style.transform = "translateY(0)";
+                        e.currentTarget.style.boxShadow =
+                          "0 2px 4px rgba(46, 204, 113, 0.2)";
+                      }}
+                    >
+                      View Details
+                    </Link>
+                    <Link
+                      to={`/students/select/${student._id}`}
+                      style={styles.selectButton}
+                      onMouseOver={(e) => {
+                        e.currentTarget.style.backgroundColor = "#27ae60";
+                        e.currentTarget.style.transform = "translateY(-2px)";
+                        e.currentTarget.style.boxShadow =
+                          "0 4px 8px rgba(46, 204, 113, 0.3)";
+                      }}
+                      onMouseOut={(e) => {
+                        e.currentTarget.style.backgroundColor = "#2ecc71";
+                        e.currentTarget.style.transform = "translateY(0)";
+                        e.currentTarget.style.boxShadow =
+                          "0 2px 4px rgba(46, 204, 113, 0.2)";
+                      }}
+                    >
+                      Select Course
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </>
   );
 };
 
