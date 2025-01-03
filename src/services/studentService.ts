@@ -6,35 +6,6 @@ import { emailConfig } from "../config/emailConfig"
 
 export class StudentService {
 
-  async createStudent(
-    studentName: string,
-    age: number,
-    className: string,
-    email: string
-  ) {
-    const existingClass = await Classes.findOne({
-      class_name: className,
-    }).populate("courses");
-    if (!existingClass) {
-      throw new Error("Class not found.");
-    }
-
-    const courseNames = existingClass.courses.map(
-      (course: any) => course.course_name
-    );
-
-    const newStudent = new Students({
-      student_name: studentName,
-      age: age,
-      class: existingClass._id,
-      email: email,
-    });
-
-    const createdStudent = await newStudent.save();
-    await emailConfig(studentName, email, className, courseNames);
-    return createdStudent;
-  }
-
   async searchStudents(searchTerm: any) {
     try {
       const results = await Students.aggregate([
