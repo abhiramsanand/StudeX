@@ -1,5 +1,5 @@
 const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.clear();
   };
 
   export default handleLogout;
