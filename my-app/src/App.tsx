@@ -9,12 +9,14 @@ import CreateCourse from "./components/createCourse";
 import Messages from "./components/messages"
 import Login from "./components/login";
 import Chat from "./components/chats"
+import RegisterAdmin from "./components/registerAdmin";
 
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/resgisteradmin" element={<RegisterAdmin />} />
         <Route path="/chats" element={<Chat />} />
         <Route path="/messages" element={<Messages />} />
         <Route path="/students" element={<StudentsTable />} />

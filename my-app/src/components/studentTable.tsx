@@ -54,6 +54,9 @@ const StudentsTable: React.FC = () => {
   };
 
   const uname = localStorage.getItem("name");
+  const aname = localStorage.getItem("adminName");
+  const userId = localStorage.getItem("userId");
+  const role = localStorage.getItem("role");
 
   const styles = {
     container: {
@@ -186,7 +189,7 @@ const StudentsTable: React.FC = () => {
       >
         <span style={{ color: "black" }}>Hello, </span>
         <br />
-        {uname}!
+        {uname ? uname : aname}!
       </h1>
       <div
         style={{
@@ -243,60 +246,118 @@ const StudentsTable: React.FC = () => {
             }}
           />
           <div style={{ display: "flex", gap: "10px" }}>
-            <Link
-              to="/courses/create"
-              style={styles.createButton}
-              onMouseOver={(e) => {
-                e.currentTarget.style.backgroundColor = "#2980b9";
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow =
-                  "0 6px 12px rgba(52, 152, 219, 0.3)";
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.backgroundColor = "#3498db";
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow =
-                  "0 4px 6px rgba(52, 152, 219, 0.2)";
-              }}
-            >
-              Create Course
-            </Link>
-            <Link
-              to="/classes/create"
-              style={styles.createButton}
-              onMouseOver={(e) => {
-                e.currentTarget.style.backgroundColor = "#2980b9";
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow =
-                  "0 6px 12px rgba(52, 152, 219, 0.3)";
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.backgroundColor = "#3498db";
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow =
-                  "0 4px 6px rgba(52, 152, 219, 0.2)";
-              }}
-            >
-              Create Class
-            </Link>
-            <Link
-              to="/students/create"
-              style={styles.createButton}
-              onMouseOver={(e) => {
-                e.currentTarget.style.backgroundColor = "#2980b9";
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow =
-                  "0 6px 12px rgba(52, 152, 219, 0.3)";
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.backgroundColor = "#3498db";
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow =
-                  "0 4px 6px rgba(52, 152, 219, 0.2)";
-              }}
-            >
-              Create Student
-            </Link>
+            <div style={{ display: "flex", gap: "10px" }}>
+              {role === "admin" ? (
+                <Link
+                  to="/courses/create"
+                  style={{
+                    ...styles.createButton,
+                    cursor: "pointer",
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.backgroundColor = "#2980b9";
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                    e.currentTarget.style.boxShadow =
+                      "0 6px 12px rgba(52, 152, 219, 0.3)";
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.backgroundColor = "#3498db";
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow =
+                      "0 4px 6px rgba(52, 152, 219, 0.2)";
+                  }}
+                >
+                  Create Course
+                </Link>
+              ) : (
+                <div
+                  style={{
+                    ...styles.createButton,
+                    backgroundColor: "#d3d3d3",
+                    color: "#a9a9a9",
+                    cursor: "not-allowed",
+                    pointerEvents: "none",
+                    boxShadow: "none",
+                  }}
+                >
+                  Create Course
+                </div>
+              )}
+
+              {role === "admin" ? (
+                <Link
+                  to="/classes/create"
+                  style={{
+                    ...styles.createButton,
+                    cursor: "pointer",
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.backgroundColor = "#2980b9";
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                    e.currentTarget.style.boxShadow =
+                      "0 6px 12px rgba(52, 152, 219, 0.3)";
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.backgroundColor = "#3498db";
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow =
+                      "0 4px 6px rgba(52, 152, 219, 0.2)";
+                  }}
+                >
+                  Create Class
+                </Link>
+              ) : (
+                <div
+                  style={{
+                    ...styles.createButton,
+                    backgroundColor: "#d3d3d3",
+                    color: "#a9a9a9",
+                    cursor: "not-allowed",
+                    pointerEvents: "none",
+                    boxShadow: "none",
+                  }}
+                >
+                  Create Class
+                </div>
+              )}
+
+              {role === "admin" ? (
+                <Link
+                  to="/students/create"
+                  style={{
+                    ...styles.createButton,
+                    cursor: "pointer",
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.backgroundColor = "#2980b9";
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                    e.currentTarget.style.boxShadow =
+                      "0 6px 12px rgba(52, 152, 219, 0.3)";
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.backgroundColor = "#3498db";
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow =
+                      "0 4px 6px rgba(52, 152, 219, 0.2)";
+                  }}
+                >
+                  Create Student
+                </Link>
+              ) : (
+                <div
+                  style={{
+                    ...styles.createButton,
+                    backgroundColor: "#d3d3d3",
+                    color: "#a9a9a9",
+                    cursor: "not-allowed",
+                    pointerEvents: "none",
+                    boxShadow: "none",
+                  }}
+                >
+                  Create Student
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <div
@@ -362,24 +423,26 @@ const StudentsTable: React.FC = () => {
                     >
                       View Details
                     </Link>
-                    <Link
-                      to={`/students/select/${student._id}`}
-                      style={styles.selectButton}
-                      onMouseOver={(e) => {
-                        e.currentTarget.style.backgroundColor = "#27ae60";
-                        e.currentTarget.style.transform = "translateY(-2px)";
-                        e.currentTarget.style.boxShadow =
-                          "0 4px 8px rgba(46, 204, 113, 0.3)";
-                      }}
-                      onMouseOut={(e) => {
-                        e.currentTarget.style.backgroundColor = "#2ecc71";
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow =
-                          "0 2px 4px rgba(46, 204, 113, 0.2)";
-                      }}
-                    >
-                      Select Course
-                    </Link>
+                    {student._id === userId && (
+                      <Link
+                        to={`/students/select/${student._id}`}
+                        style={styles.selectButton}
+                        onMouseOver={(e) => {
+                          e.currentTarget.style.backgroundColor = "#27ae60";
+                          e.currentTarget.style.transform = "translateY(-2px)";
+                          e.currentTarget.style.boxShadow =
+                            "0 4px 8px rgba(46, 204, 113, 0.3)";
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.style.backgroundColor = "#2ecc71";
+                          e.currentTarget.style.transform = "translateY(0)";
+                          e.currentTarget.style.boxShadow =
+                            "0 2px 4px rgba(46, 204, 113, 0.2)";
+                        }}
+                      >
+                        Select Course
+                      </Link>
+                    )}
                   </td>
                 </tr>
               ))}
