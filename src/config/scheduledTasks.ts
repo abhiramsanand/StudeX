@@ -1,6 +1,6 @@
 import cron from "node-cron";
 import { Students } from "../models/students";
-import { noCourses } from "./noCourses";
+import { noCourses } from "./sendEmails";
 
 export const scheduledTask = () => {
   cron.schedule("* * * * *", async () => {

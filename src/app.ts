@@ -32,6 +32,6 @@ app.use("/api/classes", authenticateToken, classRouter);
 app.use("/api/students", authenticateToken, studentRouter);
 app.use("/api/messages", authenticateToken, messagesRouter);
 
-scheduledTask();
+// scheduledTask();
 
 export default app;

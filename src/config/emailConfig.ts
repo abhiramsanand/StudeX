@@ -1,10 +1,9 @@
 import nodemailer from "nodemailer";
 
 export const emailConfig = async (
-  studentName: string,
-  email: string,
-  className: string,
-  courses: string[]
+  to: string,
+  subject: string,
+  text: string
 ) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -14,12 +13,11 @@ export const emailConfig = async (
     },
   });
 
-  const courseList = courses.join(", ");
   const mailOptions = {
     from: process.env.APP_USER,
-    to: email,
-    subject: "Class Assignment Notification",
-    text: `Hello ${studentName}, you have been assigned to the ${className} class. You can select courses and fill the credits from these courses: ${courseList}.`,
+    to,
+    subject,
+    text,
   };
 
   try {
@@ -28,5 +26,4 @@ export const emailConfig = async (
   } catch (error) {
     console.error("Error sending email: ", error);
   }
-
 };
