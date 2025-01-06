@@ -8,7 +8,7 @@ interface IMessages extends Document {
 
 const MessagesSchema: Schema = new Schema(
   {
-    content: { type: String, required: true, unique: true },
+    content: { type: String, required: true },
     sender: [{ type: Schema.Types.ObjectId, ref: "students", required: true }],
     receiver: [{ type: Schema.Types.ObjectId, ref: "students", required: true }],
   },
