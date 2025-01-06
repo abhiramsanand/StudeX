@@ -2,7 +2,7 @@ import cron from "node-cron";
 import { Students } from "../models/students";
 import { noCourses } from "./sendEmails";
 
-export const scheduledTask = () => {
+export const scheduledTask1 = () => {
   cron.schedule("* * * * *", async () => {
     try {
       const studentsWithoutCourses = await Students.find(
