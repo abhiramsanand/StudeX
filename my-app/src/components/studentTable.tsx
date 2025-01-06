@@ -54,7 +54,6 @@ const StudentsTable: React.FC = () => {
   };
 
   const uname = localStorage.getItem("name");
-  const aname = localStorage.getItem("adminName");
   const userId = localStorage.getItem("userId");
   const role = localStorage.getItem("role");
 
@@ -189,7 +188,7 @@ const StudentsTable: React.FC = () => {
       >
         <span style={{ color: "black" }}>Hello, </span>
         <br />
-        {uname ? uname : aname}!
+        {uname}!
       </h1>
       <div
         style={{

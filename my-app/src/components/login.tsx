@@ -57,9 +57,12 @@ const Login: React.FC = () => {
       );
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("userId", response.data.user._id);
-      localStorage.setItem("name", response.data.user.student_name)
-      localStorage.setItem("adminName", response.data.admin_name)
-      localStorage.setItem("role", response.data.user.role)
+      localStorage.setItem("role", response.data.user.role);
+      if (response.data.user.role === "admin") {
+        localStorage.setItem("name", response.data.user.admin_name);
+      } else if (response.data.user.role === "user") {
+        localStorage.setItem("name", response.data.user.student_name);
+      }
       navigate("/students");
     } catch (err: any) {
       setError(err.response?.data?.message || "Login failed");
@@ -68,7 +71,14 @@ const Login: React.FC = () => {
 
   return (
     <div style={styles.container}>
-      <h1 style={{ textAlign: "center", marginBottom: "20px", color: "#333", fontWeight: "bold" }}>
+      <h1
+        style={{
+          textAlign: "center",
+          marginBottom: "20px",
+          color: "#333",
+          fontWeight: "bold",
+        }}
+      >
         LOGIN
       </h1>
       {error && (
@@ -109,7 +119,15 @@ const Login: React.FC = () => {
         <button type="submit" style={styles.submitButton}>
           Login
         </button>
-        <Link to={'/resgisteradmin'} style={{display: "flex", justifyContent: "center", marginTop: "10px", color: "green"}}>
+        <Link
+          to={"/resgisteradmin"}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "10px",
+            color: "green",
+          }}
+        >
           Register Admin
         </Link>
       </form>

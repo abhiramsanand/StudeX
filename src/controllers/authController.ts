@@ -29,7 +29,8 @@ export class AuthController {
 
     async registerAdmin(req: Request, res: Response): Promise<void> {
         try {
-            const { adminName, email, password, role } = req.body;
+            const { adminName, email, password } = req.body;
+            const role = 'admin';
             
             if (!adminName || !email || !password) {
                 res.status(400).json({ message: 'All fields are required' });
