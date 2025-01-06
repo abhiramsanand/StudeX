@@ -130,7 +130,9 @@ const Chat: React.FC = () => {
 
       {/* Error & Success Messages */}
       {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
-      {success && <p style={{ color: "green", textAlign: "center" }}>{success}</p>}
+      {success && (
+        <p style={{ color: "green", textAlign: "center" }}>{success}</p>
+      )}
 
       {/* Message Input Area */}
       <textarea
@@ -157,6 +159,7 @@ const Chat: React.FC = () => {
 
       {/* Send Button */}
       <button
+        type="button" // Ensure this is set to prevent form submission
         onClick={handleSendMessage}
         style={{
           display: "block",
