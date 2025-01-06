@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Login: React.FC = () => {
@@ -58,6 +58,8 @@ const Login: React.FC = () => {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("userId", response.data.user._id);
       localStorage.setItem("name", response.data.user.student_name)
+      localStorage.setItem("adminName", response.data.admin_name)
+      localStorage.setItem("role", response.data.user.role)
       navigate("/students");
     } catch (err: any) {
       setError(err.response?.data?.message || "Login failed");
@@ -66,8 +68,8 @@ const Login: React.FC = () => {
 
   return (
     <div style={styles.container}>
-      <h1 style={{ textAlign: "center", marginBottom: "20px", color: "#333" }}>
-        Login
+      <h1 style={{ textAlign: "center", marginBottom: "20px", color: "#333", fontWeight: "bold" }}>
+        LOGIN
       </h1>
       {error && (
         <p style={{ color: "red", textAlign: "center", marginBottom: "15px" }}>
@@ -107,6 +109,9 @@ const Login: React.FC = () => {
         <button type="submit" style={styles.submitButton}>
           Login
         </button>
+        <Link to={'/resgisteradmin'} style={{display: "flex", justifyContent: "center", marginTop: "10px", color: "green"}}>
+          Register Admin
+        </Link>
       </form>
     </div>
   );

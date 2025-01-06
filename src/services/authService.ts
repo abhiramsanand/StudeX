@@ -3,8 +3,8 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { Students, IStudents } from "../models/students";
 import { Classes } from "../models/classes";
-import { Courses } from "../models/courses";
 import { emailConfig } from "../config/emailConfig";
+import { Admins, IAdmins } from "../models/admins";
 
 export class AuthService {
   private readonly JWT_SECRET: string;
@@ -55,33 +55,67 @@ export class AuthService {
     return createdStudent;
   }
 
-  async loginStudent(
+  async registerAdmin(
+    adminName: string,
     email: string,
-    password: string
-  ): Promise<{ token: string; user: IStudents }> {
-    const user = await Students.findOne({ email });
-    if (!user) {
-      throw new Error("Invalid email");
+    password: string,
+    role: "admin"
+  ): Promise<IAdmins> {
+    const existingUser = await Admins.findOne({ email });
+    if (existingUser) {
+      throw new Error("Email already registered");
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      throw new Error("Invalid password");
-    }
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    const token = this.generateToken(user);
-    return { token, user };
+    const newAdmin = new Admins({
+      admin_name: adminName,
+      email,
+      password: hashedPassword,
+      role,
+    });
+
+    const createdAdmin = await newAdmin.save();
+    return createdAdmin;
   }
 
-  private generateToken(user: IStudents): string {
+  async loginUser(
+    email: string,
+    password: string
+  ): Promise<{ token: string; user: any; role: string }> {
+    const user = await Students.findOne({ email });
+    const admin = await Admins.findOne({ email });
+  
+    if (!user && !admin) {
+      throw new Error("Invalid email or user not found");
+    }
+  
+    const isMatch =
+      user && (await bcrypt.compare(password, user.password));
+    const isAdminMatch =
+      admin && (await bcrypt.compare(password, admin.password));
+  
+    if (!isMatch && !isAdminMatch) {
+      throw new Error("Invalid password");
+    }
+  
+    const loggedInUser = isMatch ? user : admin;
+    const role = isMatch ? "student" : "admin";
+  
+    const token = this.generateToken(loggedInUser, role);
+  
+    return { token, user: loggedInUser, role };
+  }
+  
+  private generateToken(user: any, role: string): string {
     return jwt.sign(
       {
         userId: user._id,
         email: user.email,
-        role: user.role,
+        role,
       },
       this.JWT_SECRET,
       { expiresIn: this.JWT_EXPIRES_IN }
     );
-  }
+  }  
 }
