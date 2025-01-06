@@ -3,8 +3,8 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { Students, IStudents } from "../models/students";
 import { Classes } from "../models/classes";
-import { emailConfig } from "../config/emailConfig";
 import { Admins, IAdmins } from "../models/admins";
+import { classAssigned } from "../config/sendEmails";
 
 export class AuthService {
   private readonly JWT_SECRET: string;
@@ -51,7 +51,7 @@ export class AuthService {
     });
 
     const createdStudent = await newStudent.save();
-    await emailConfig(studentName, email, className, courseNames);
+    await classAssigned(studentName, email, className, courseNames);
     return createdStudent;
   }
 
