@@ -198,19 +198,21 @@ const StudentsTable: React.FC = () => {
           marginTop: "10px",
         }}
       >
-        <Link
-          to="/chats"
-          style={{
-            alignSelf: "flex-end",
-            marginRight: "30px",
-            border: "1px solid green",
-            borderRadius: "5px",
-            padding: "8px 8px",
-            color: "green",
-          }}
-        >
-          Chat with users
-        </Link>
+        {role !== "admin" && (
+          <Link
+            to="/chats"
+            style={{
+              alignSelf: "flex-end",
+              marginRight: "30px",
+              border: "1px solid green",
+              borderRadius: "5px",
+              padding: "8px 8px",
+              color: "green",
+            }}
+          >
+            Chat with users
+          </Link>
+        )}
         <Link
           to="/"
           style={{
