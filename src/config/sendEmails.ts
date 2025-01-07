@@ -17,3 +17,14 @@ export const noCourses = async (studentName: string, email: string) => {
 
   await emailConfig(email, "No Courses Selected", message);
 };
+
+export const messageNew = async (
+  studentName: string,
+  sender: string,
+  email: string,
+  content: string
+) => {
+  const message = `Hi ${studentName}, there is a new messge for you in StudeX. ${sender} says: "${content}"`;
+
+  await emailConfig(email, "New message in StudeX", message);
+};
