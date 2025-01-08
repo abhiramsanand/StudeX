@@ -8,6 +8,7 @@ import studentRouter from "./routes/studentRouter";
 import messagesRouter from "./routes/messagesRouter";
 import authRouter from "./routes/authRouter";
 import { authenticateToken } from "./middlewares/authMiddleware";
+import s3Routes from "./routes/s3Router";
 import { scheduledTask1 } from "./config/scheduledTasks";
 
 dotenv.config();
@@ -31,6 +32,7 @@ app.use("/api/courses", authenticateToken, courseRouter);
 app.use("/api/classes", authenticateToken, classRouter);
 app.use("/api/students", authenticateToken, studentRouter);
 app.use("/api/messages", authenticateToken, messagesRouter);
+app.use("/api/s3", s3Routes);
 
 // scheduledTask1();
 
