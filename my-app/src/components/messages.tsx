@@ -1,7 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:3000"); 
 
 const Chat: React.FC = () => {
   const [messageContent, setMessageContent] = useState("");
@@ -9,10 +13,11 @@ const Chat: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const fetchMessages = async () => {
-    const userId1 = localStorage.getItem("userId");
-    const userId2 = localStorage.getItem("selectedStudent");
+  const userId1 = localStorage.getItem("userId");
+  const userId2 = localStorage.getItem("selectedStudent");
+  const username = localStorage.getItem("studentName");
 
+  const fetchMessages = async () => {
     if (!userId1 || !userId2) {
       setError("Sorry, we are facing some problems currently.");
       return;
@@ -42,10 +47,7 @@ const Chat: React.FC = () => {
   };
 
   const handleSendMessage = async () => {
-    const senderId = localStorage.getItem("userId");
-    const receiverId = localStorage.getItem("selectedStudent");
-
-    if (!senderId || !receiverId) {
+    if (!userId1 || !userId2) {
       setError("Sorry, we are facing some problems currently.");
       return;
     }
@@ -55,8 +57,8 @@ const Chat: React.FC = () => {
         "http://localhost:3000/api/messages/create",
         {
           content: messageContent,
-          sender: [senderId],
-          receiver: [receiverId],
+          sender: [userId1],
+          receiver: [userId2],
         },
         {
           headers: {
@@ -67,9 +69,8 @@ const Chat: React.FC = () => {
       );
 
       if (response.status === 201) {
-        setSuccess("");
         setMessageContent("");
-        fetchMessages();
+        setSuccess("");
       }
     } catch (err) {
       setError("Failed to send the message. Please try again.");
@@ -78,10 +79,20 @@ const Chat: React.FC = () => {
 
   useEffect(() => {
     fetchMessages();
-  }, []);
 
-  const userId1 = localStorage.getItem("userId");
-  const username = localStorage.getItem("studentName");
+    socket.on("newMessage", (newMessage) => {
+      if (
+        (newMessage.sender === userId1 && newMessage.receiver === userId2) ||
+        (newMessage.sender === userId2 && newMessage.receiver === userId1)
+      ) {
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+      }
+    });
+
+    return () => {
+      socket.off("newMessage");
+    };
+  }, [userId1, userId2]);
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
@@ -128,13 +139,11 @@ const Chat: React.FC = () => {
         )}
       </div>
 
-      {/* Error & Success Messages */}
       {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
       {success && (
         <p style={{ color: "green", textAlign: "center" }}>{success}</p>
       )}
 
-      {/* Message Input Area */}
       <textarea
         value={messageContent}
         onChange={(e) => setMessageContent(e.target.value)}
@@ -157,9 +166,8 @@ const Chat: React.FC = () => {
         }}
       />
 
-      {/* Send Button */}
       <button
-        type="button" // Ensure this is set to prevent form submission
+        type="button"
         onClick={handleSendMessage}
         style={{
           display: "block",
