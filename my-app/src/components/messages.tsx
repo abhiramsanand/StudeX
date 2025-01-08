@@ -1,21 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:3000"); 
+const socket = io("http://localhost:3000");
 
 const Chat: React.FC = () => {
   const [messageContent, setMessageContent] = useState("");
   const [messages, setMessages] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null); 
 
   const userId1 = localStorage.getItem("userId");
   const userId2 = localStorage.getItem("selectedStudent");
   const username = localStorage.getItem("studentName");
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const fetchMessages = async () => {
     if (!userId1 || !userId2) {
@@ -40,6 +45,7 @@ const Chat: React.FC = () => {
 
       if (response.status === 200) {
         setMessages(response.data.data);
+        scrollToBottom();
       }
     } catch (err) {
       setError("Please try again after sometime.");
@@ -71,6 +77,7 @@ const Chat: React.FC = () => {
       if (response.status === 201) {
         setMessageContent("");
         setSuccess("");
+        scrollToBottom(); 
       }
     } catch (err) {
       setError("Failed to send the message. Please try again.");
@@ -86,6 +93,7 @@ const Chat: React.FC = () => {
         (newMessage.sender === userId2 && newMessage.receiver === userId1)
       ) {
         setMessages((prevMessages) => [...prevMessages, newMessage]);
+        scrollToBottom(); // Scroll when a new message is received
       }
     });
 
@@ -93,6 +101,10 @@ const Chat: React.FC = () => {
       socket.off("newMessage");
     };
   }, [userId1, userId2]);
+
+  useEffect(() => {
+    scrollToBottom(); // Scroll whenever messages change
+  }, [messages]);
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
@@ -137,6 +149,7 @@ const Chat: React.FC = () => {
         ) : (
           <p>No messages yet. Start a conversation!</p>
         )}
+        <div ref={messagesEndRef} /> {/* Reference to scroll to */}
       </div>
 
       {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
