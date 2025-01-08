@@ -8,7 +8,6 @@ import studentRouter from "./routes/studentRouter";
 import messagesRouter from "./routes/messagesRouter";
 import authRouter from "./routes/authRouter";
 import { authenticateToken } from "./middlewares/authMiddleware";
-import { scheduledTask1 } from "./config/scheduledTasks";
 
 dotenv.config();
 connectDB();
@@ -26,12 +25,9 @@ app.use(
 app.use(express.json());
 
 app.use("/api/auth", authRouter);
-
 app.use("/api/courses", authenticateToken, courseRouter);
 app.use("/api/classes", authenticateToken, classRouter);
 app.use("/api/students", authenticateToken, studentRouter);
 app.use("/api/messages", authenticateToken, messagesRouter);
-
-// scheduledTask1();
 
 export default app;

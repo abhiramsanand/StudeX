@@ -1,4 +1,4 @@
-import { Schema, Types } from "mongoose";
+import { io } from "../server";
 import { IMessages, Messages } from "../models/messages";
 import { Students } from "../models/students";
 import { messageNew } from "../config/sendEmails";
@@ -44,6 +44,9 @@ export class MessagesService {
     });
 
     const savedMessage = await newMessage.save();
+
+    io.emit("newMessage", savedMessage);
+
     this.sendEmails(savedMessage, sender, receiver, content);
     return savedMessage;
   }
