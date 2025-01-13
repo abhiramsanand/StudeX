@@ -16,7 +16,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173","https://stude-x.vercel.app"],
+    origin: ["http://localhost:5173","https://studex-a79vgqm49-abhiramsanands-projects.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
